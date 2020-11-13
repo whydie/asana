@@ -1,4 +1,8 @@
-## Default admin
+## Default settings
+```bash
+export WORKSPACE_GID = YOUR WORKSPACE GID
+export PERSONAL_ACCESS_TOKEN = YOUR PERSONAL TOKEN
+```
 
 ```
 Login: admin

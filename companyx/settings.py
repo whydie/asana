@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-WORKSPACE_GID = "1198720398076182"
+WORKSPACE_GID = os.getenv("WORKSPACE_GID", "1198720398076182")
 
 _accessToken = os.getenv("PERSONAL_ACCESS_TOKEN", "1/1198720398060592:6436ec444a5e2577ea8c74dffbbf8198")
 ASANA = asana.Client.access_token(accessToken=_accessToken)
