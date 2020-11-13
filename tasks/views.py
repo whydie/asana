@@ -23,7 +23,6 @@ class TaskListCreate(generics.ListCreateAPIView):
 
 
 class TaskRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    lookup_field = "gid"
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
@@ -36,6 +35,5 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
 
 class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    lookup_field = "gid"
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()

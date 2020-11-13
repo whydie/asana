@@ -16,7 +16,6 @@ def create_project(project) -> str:
 def update_project(project):
     """
     :param project: Project object.
-    :raises `asana.error.NotFoundError`: if project was not found.
     """
     client.projects.update_project(project.gid, {"name": project.name})
 
@@ -38,7 +37,6 @@ def create_task(task) -> str:
 def update_task(task):
     """
     :param task: Task object.
-    :raises `asana.error.NotFoundError`: if task was not found.
     """
     client.tasks.update_task(task.gid, {
         "notes": task.notes,

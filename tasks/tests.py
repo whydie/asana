@@ -19,17 +19,17 @@ class ProjectTests(APITestCase):
     def _create_user(self, **kwargs) -> dict:
         return self.client.post(reverse("users"), data={**kwargs}).json()
 
-    def _get_project(self, project_gid: str):
-        return client.projects.get_project(project_gid)
+    def _get_project(self, gid: str):
+        return client.projects.get_project(gid)
 
-    def _delete_project(self, project_gid: str):
-        self.client.delete(reverse("project", kwargs={"gid": project_gid}))
+    def _delete_project(self, pk: int):
+        self.client.delete(reverse("project", kwargs={"pk": pk}))
 
     def _create_project(self, name: str) -> dict:
         return self.client.post(reverse("projects"), data={"name": name}).json()
 
-    def _patch_project(self, gid: str, **kwargs):
-        self.client.patch(reverse("project", kwargs={"gid": gid}), data={**kwargs})
+    def _patch_project(self, pk: int, **kwargs):
+        self.client.patch(reverse("project", kwargs={"pk": pk}), data={**kwargs})
 
     def test_create(self):
         project = self._get_project(self.project["gid"])
@@ -39,7 +39,7 @@ class ProjectTests(APITestCase):
     def test_update(self):
         new_name = "test2"
 
-        self._patch_project(self.project["gid"], name=new_name)
+        self._patch_project(self.project["pk"], name=new_name)
 
         project = self._get_project(self.project["gid"])
 
@@ -49,14 +49,14 @@ class ProjectTests(APITestCase):
         name = "test3"
         project = self._create_project(name)
 
-        self._delete_project(project["gid"])
+        self._delete_project(project["pk"])
 
         asana_project = self._get_project(project["gid"])
 
         does_asana_project_exist = "gid" in asana_project
         self.assertTrue(does_asana_project_exist)
 
-        does_db_project_exist = Project.objects.filter(gid=project["gid"]).exists()
+        does_db_project_exist = Project.objects.filter(pk=project["pk"]).exists()
         self.assertFalse(does_db_project_exist)
 
 
@@ -74,11 +74,11 @@ class TaskTests(APITestCase):
     def _create_user(self, **kwargs) -> dict:
         return self.client.post(reverse("users"), data={**kwargs}).json()
 
-    def _get_task(self, task_gid: str):
-        return client.tasks.get_task(task_gid)
+    def _get_task(self, gid: str):
+        return client.tasks.get_task(gid)
 
-    def _destroy_task(self, task_gid: str):
-        self.client.delete(reverse("task", kwargs={"gid": task_gid}))
+    def _destroy_task(self, pk: int):
+        self.client.delete(reverse("task", kwargs={"pk": pk}))
 
     def _create_project(self, name: str) -> dict:
         return self.client.post(reverse("projects"), data={"name": name}).json()
@@ -90,8 +90,8 @@ class TaskTests(APITestCase):
             "project": project_pk
         }).json()
 
-    def _patch_task(self, gid: str, **kwargs):
-        self.client.patch(reverse("task", kwargs={"gid": gid}), data={**kwargs})
+    def _patch_task(self, pk: int, **kwargs):
+        self.client.patch(reverse("task", kwargs={"pk": pk}), data={**kwargs})
 
     def test_create(self):
         task = self._get_task(self.task["gid"])
@@ -101,7 +101,7 @@ class TaskTests(APITestCase):
     def test_update(self):
         new_notes = "New notes"
 
-        self._patch_task(self.task["gid"], notes=new_notes)
+        self._patch_task(self.task["pk"], notes=new_notes)
 
         project = self._get_task(self.task["gid"])
 
@@ -111,12 +111,12 @@ class TaskTests(APITestCase):
         notes = "Test notes 3"
         task = self._create_task(notes, self.user["pk"], self.project["pk"])
 
-        self._destroy_task(task["gid"])
+        self._destroy_task(task["pk"])
 
         asana_task = self._get_task(task["gid"])
 
         does_asana_task_exist = "gid" in asana_task
         self.assertTrue(does_asana_task_exist)
 
-        does_db_task_exist = Project.objects.filter(gid=task["gid"]).exists()
+        does_db_task_exist = Project.objects.filter(pk=task["pk"]).exists()
         self.assertFalse(does_db_task_exist)
